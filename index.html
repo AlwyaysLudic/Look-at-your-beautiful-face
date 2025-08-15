@@ -70,16 +70,26 @@
   </div>
 
   <script>
-    // Récupère le compteur stocké ou met à 0
+    // Gestion du compteur de likes
     let likes = parseInt(localStorage.getItem('likes')) || 0;
-    document.getElementById('like-count').textContent = likes;
+    let hasLiked = localStorage.getItem('hasLiked') === 'true';
 
-    function addLike() {
-      likes++;
-      localStorage.setItem('likes', likes); // Sauvegarde
-      document.getElementById('like-count').textContent = likes;
+    document.getElementById('like-count').textContent = likes;
+    if (hasLiked) {
+      document.querySelector('#like-section button').disabled = true;
     }
 
+    function addLike() {
+      if (!hasLiked) {
+        likes++;
+        localStorage.setItem('likes', likes);
+        localStorage.setItem('hasLiked', 'true');
+        document.getElementById('like-count').textContent = likes;
+        document.querySelector('#like-section button').disabled = true;
+      }
+    }
+
+    // Affichage de la tête et du message
     function showFace() {
       const name = document.getElementById('name').value.trim();
       if (!name) return;

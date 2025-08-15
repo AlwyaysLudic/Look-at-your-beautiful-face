@@ -1,80 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Head</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 50px;
+      margin: 50px 12px;
       background-color: #f7f7f7;
     }
+    h1 { color: #333; margin-bottom: 8px; }
+    p { color: #555; margin-top: 0; }
+    .controls { margin-top: 16px; }
     input {
       padding: 10px;
-      font-size: 1em;
+      font-size: 1rem;
       border: 2px solid #ccc;
-      border-radius: 5px;
-      width: 250px;
+      border-radius: 6px;
+      width: 260px;
+      max-width: 80vw;
     }
     button {
-      padding: 10px 20px;
-      font-size: 1em;
+      padding: 10px 16px;
+      font-size: 1rem;
       border: none;
       background-color: #007bff;
-      color: white;
-      border-radius: 5px;
+      color: #fff;
+      border-radius: 6px;
       cursor: pointer;
-      margin-left: 10px;
+      margin-left: 8px;
     }
-    button:hover {
-      background-color: #0056b3;
+    button:hover { background-color: #005ec2; }
+    #result { margin-top: 28px; }
+    #result img {
+      max-width: 240px;
+      border-radius: 12px;
+      border: 3px solid #333;
+      background: #fff;
     }
-    #resultat {
-      margin-top: 30px;
-    }
-    #resultat img {
-      max-width: 200px;
-      border-radius: 10px;
-    }
+    .hint { font-size: .9rem; color: #777; margin-top: 10px; }
   </style>
 </head>
 <body>
 
   <h1>Your Head</h1>
   <p>Enter your first name, last name or nickname:</p>
-  <input type="text" id="name" placeholder="Your name here">
-  <button onclick="showHead()">See my face</button>
 
-  <div id="resultat"></div>
+  <div class="controls">
+    <input type="text" id="name" placeholder="Your name here" />
+    <button id="see">See my face</button>
+  </div>
+
+  <div id="result" aria-live="polite"></div>
+  <div class="hint">Tip: The first letter decides the face. Try different letters!</div>
 
   <script>
-    const heads = {
-      a: "https://i.imgur.com/x1.jpg",
-      b: "https://i.imgur.com/x2.jpg",
-      c: "https://i.imgur.com/x3.jpg",
-      d: "https://i.imgur.com/x4.jpg",
-      // ajoute autant de lettres/images que tu veux...
-      default: "https://i.imgur.com/default.jpg"
-    };
+    // Choisit la première lettre alphabétique du nom, en ignorant les espaces et accents
+    function firstAlphaLetter(input) {
+      const cleaned = input
+        .normalize('NFD')                // sépare lettres + accents
+        .replace(/[\u0300-\u036f]/g, '') // retire accents
+        .trim();
+      const match = cleaned.match(/[a-z]/i);
+      return match ? match[0].toLowerCase() : null;
+    }
+
+    // Construit une URL d'image selon la lettre (A→Z). RoboHash génère une image automatiquement.
+    function urlForLetter(letter) {
+      // .png + size pour une image nette ; `set=set2` pour varier le style
+      return `https://robohash.org/${encodeURIComponent(letter)}.png?size=240x240&set=set2`;
+    }
 
     function showHead() {
-      const name = document.getElementById("name").value.trim();
-      if (name === "") {
-        alert("Please enter a name!");
+      const name = document.getElementById('name').value;
+      const result = document.getElementById('result');
+
+      if (!name || !name.trim()) {
+        result.innerHTML = `<p style="color:#d00">Please enter a name first.</p>`;
         return;
       }
 
-      const firstLetter = name[0].toLowerCase();
-      const imageUrl = heads[firstLetter] || heads.default;
+      const letter = firstAlphaLetter(name);
+      if (!letter) {
+        result.innerHTML = `<p style="color:#d00">Please include at least one letter (A–Z).</p>`;
+        return;
+      }
 
-      document.getElementById("resultat").innerHTML = `
-        <p>Here is your head, ${name} 😏</p>
-        <img src="${imageUrl}" alt="Your head">
+      const imgUrl = urlForLetter(letter);
+
+      // Affiche le résultat
+      result.innerHTML = `
+        <p>Here is your head, <strong>${escapeHtml(name)}</strong> 😏 (letter: ${letter.toUpperCase()})</p>
+        <img src="${imgUrl}" alt="Generated head for letter ${letter.toUpperCase()}" />
       `;
     }
+
+    // Petite fonction pour éviter d'injecter du HTML quand on affiche le nom
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, s => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[s]));
+    }
+
+    // Bouton + touche Entrée
+    document.getElementById('see').addEventListener('click', showHead);
+    document.getElementById('name').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') showHead();
+    });
   </script>
 
 </body>
 </html>
-

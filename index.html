@@ -6,6 +6,7 @@
   <style>
     body { text-align: center; font-family: sans-serif; }
     img { max-width: 300px; margin-top: 20px; }
+    p { font-size: 18px; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -15,23 +16,26 @@
   <div id="result"></div>
 
   <script>
-  function showFace() {
-    const name = document.getElementById('name').value.trim();
-    if (!name) return;
+    function showFace() {
+      const name = document.getElementById('name').value.trim();
+      if (!name) return;
 
-    const letter = name[0].toLowerCase();
+      const letter = name[0].toLowerCase();
 
-    let imgSrc = '';
-    let message = '';
-    if (letter === 'a') {
-      imgSrc = 'https://i.imgur.com/kvdcgxV.jpeg';
-      message = 'So Ugly'
-} else {
-      imgSrc = `images/${letter}.jpg`; // ton dossier local
+      let imgSrc = '';
+      let message = '';
+
+      if (letter === 'a') {
+        imgSrc = 'https://i.imgur.com/kvdcgxV.jpeg';
+        message = 'So ugly';
+      } else {
+        imgSrc = `images/${letter}.jpg`; // ton dossier local
+        message = 'Not much better...';
+      }
+
+      document.getElementById('result').innerHTML = 
+        `<img src="${imgSrc}" alt="face"><p>${message}</p>`;
     }
-
-    document.getElementById('result').innerHTML = `<img src="${imgSrc}" alt="face">`;
-  }
-</script>
+  </script>
 </body>
 </html>

@@ -59,7 +59,20 @@
   <h1>Look at your beautiful (or not) face</h1>
   <input id="name" placeholder="Enter your name">
   <button onclick="showFace()">See</button>
-  <div id="result"></div>
+  <div id="result"><div id="like-section">
+  <button onclick="addLike()">👍 Like</button>
+  <span id="like-count">0</span> likes
+</div>
+
+<script>
+  let likes = 0;
+
+  function addLike() {
+    likes++;
+    document.getElementById('like-count').textContent = likes;
+  }
+</script>
+</div>
 
   <script>
     function showFace() {

@@ -4,18 +4,12 @@
   <meta charset="UTF-8">
   <title>Your Head</title>
   <style>
-    /* ====== STYLE ====== */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin-top: 50px;
-      background-color: #0081f7;
+      background-color: #f7f7f7;
     }
-
-    h1 {
-      color: #333;
-    }
-
     input {
       padding: 10px;
       font-size: 1em;
@@ -23,7 +17,6 @@
       border-radius: 5px;
       width: 250px;
     }
-
     button {
       padding: 10px 20px;
       font-size: 1em;
@@ -34,26 +27,54 @@
       cursor: pointer;
       margin-left: 10px;
     }
-
     button:hover {
       background-color: #0056b3;
     }
-
     #resultat {
       margin-top: 30px;
+    }
+    #resultat img {
+      max-width: 200px;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
 
   <h1>Your Head</h1>
-
   <p>Enter your first name, last name or nickname:</p>
-
   <input type="text" id="name" placeholder="Your name here">
-  <button>See my face</button>
+  <button onclick="showHead()">See my face</button>
 
   <div id="resultat"></div>
 
+  <script>
+    const heads = {
+      a: "https://i.imgur.com/x1.jpg",
+      b: "https://i.imgur.com/x2.jpg",
+      c: "https://i.imgur.com/x3.jpg",
+      d: "https://i.imgur.com/x4.jpg",
+      // ajoute autant de lettres/images que tu veux...
+      default: "https://i.imgur.com/default.jpg"
+    };
+
+    function showHead() {
+      const name = document.getElementById("name").value.trim();
+      if (name === "") {
+        alert("Please enter a name!");
+        return;
+      }
+
+      const firstLetter = name[0].toLowerCase();
+      const imageUrl = heads[firstLetter] || heads.default;
+
+      document.getElementById("resultat").innerHTML = `
+        <p>Here is your head, ${name} 😏</p>
+        <img src="${imageUrl}" alt="Your head">
+      `;
+    }
+  </script>
+
 </body>
 </html>
+

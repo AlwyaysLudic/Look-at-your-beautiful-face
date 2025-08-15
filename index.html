@@ -15,15 +15,21 @@
   <div id="result"></div>
 
   <script>
-    function showFace() {
-      const name = document.getElementById('name').value.trim();
-      if (!name) return;
+  function showFace() {
+    const name = document.getElementById('name').value.trim();
+    if (!name) return;
 
-      const letter = name[0].toLowerCase();
-      const imgSrc = `images/${letter}.jpg`; // tes images renommées a.jpg, b.jpg...
-      document.getElementById('result').innerHTML = `<img src="${imgSrc}" alt="face">`;
-    a= https://i.imgur.com/kvdcgxV.jpeg
-}
-  </script>
+    const letter = name[0].toLowerCase();
+
+    let imgSrc = '';
+    if (letter === 'a') {
+      imgSrc = 'https://i.imgur.com/kvdcgxV.jpeg';
+    } else {
+      imgSrc = `images/${letter}.jpg`; // ton dossier local
+    }
+
+    document.getElementById('result').innerHTML = `<img src="${imgSrc}" alt="face">`;
+  }
+</script>
 </body>
 </html>

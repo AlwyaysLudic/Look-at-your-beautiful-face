@@ -4,18 +4,13 @@
   <meta charset="UTF-8">
   <title>Your face</title>
   <style>
-    /* Style général */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin-top: 50px;
       background-color: #1E7FCB;
     }
-
-    h1 {
-      color: white;
-    }
-
+    h1 { color: white; }
     input {
       padding: 10px;
       font-size: 1em;
@@ -23,7 +18,6 @@
       border-radius: 5px;
       width: 250px;
     }
-
     button {
       padding: 10px 20px;
       font-size: 1em;
@@ -34,43 +28,50 @@
       cursor: pointer;
       margin-left: 10px;
     }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    #result {
-      margin-top: 30px;
-    }
-
-    img {
-      max-width: 300px;
-      margin-top: 20px;
-    }
-
-    p {
-      font-size: 18px;
-      margin-top: 10px;
-      color: white;
-    }
+    button:hover { background-color: #0056b3; }
+    #result { margin-top: 30px; }
+    img { max-width: 300px; margin-top: 20px; }
+    p { font-size: 18px; margin-top: 10px; color: white; }
   </style>
 </head>
 <body>
+
   <h1>Look at your beautiful (or not) face</h1>
   <input id="name" placeholder="Enter your name">
   <button onclick="showFace()">See</button>
 
-  <!-- Zone pour afficher le résultat -->
   <div id="result"></div>
 
-  <!-- Zone du compteur de likes -->
   <div id="like-section">
     <button onclick="addLike()">👍 Like</button>
     <span id="like-count">0</span> likes
   </div>
 
   <script>
-    // Gestion du compteur de likes
+    // ===========================
+    // IMAGES PAR LETTRE
+    // ===========================
+    const imagesParLettre = {
+      a: [
+        {src: 'images/a1.jpg', msg: 'So ugly'},
+        {src: 'images/a2.jpg', msg: 'A face only a mother could love'},
+        {src: 'images/a3.jpg', msg: 'Yikes!'}
+      ],
+      b: [
+        {src: 'images/b1.jpg', msg: 'B for Beautiful? Not sure...'},
+        {src: 'images/b2.jpg', msg: 'Better luck next time'}
+      ],
+      c: [
+        {src: 'images/c1.jpg', msg: 'Cool or creepy?'}
+      ]
+      // Ajoute les autres lettres ici...
+    };
+
+    const defaultImage = {src: 'images/default.jpg', msg: 'No image for this letter!'};
+
+    // ===========================
+    // COMPTEUR DE LIKE
+    // ===========================
     let likes = parseInt(localStorage.getItem('likes')) || 0;
     let hasLiked = localStorage.getItem('hasLiked') === 'true';
 
@@ -89,26 +90,25 @@
       }
     }
 
-    // Affichage de la tête et du message
+    // ===========================
+    // FONCTION PRINCIPALE
+    // ===========================
     function showFace() {
       const name = document.getElementById('name').value.trim();
       if (!name) return;
 
       const letter = name[0].toLowerCase();
 
-      let imgSrc = '';
-      let message = '';
-
-      if (letter === 'a') {
-        imgSrc = 'https://i.imgur.com/kvdcgxV.jpeg';
-        message = 'So ugly';
+      let choixImage;
+      if (imagesParLettre[letter]) {
+        const randIndex = Math.floor(Math.random() * imagesParLettre[letter].length);
+        choixImage = imagesParLettre[letter][randIndex];
       } else {
-        imgSrc = `images/${letter}.jpg`; // ton dossier local
-        message = 'Not much better...';
+        choixImage = defaultImage;
       }
 
-      document.getElementById('result').innerHTML = 
-        `<img src="${imgSrc}" alt="face"><p>${message}</p>`;
+      document.getElementById('result').innerHTML =
+        `<img src="${choixImage.src}" alt="face"><p>${choixImage.msg}</p>`;
     }
   </script>
 </body>

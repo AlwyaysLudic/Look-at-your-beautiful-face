@@ -59,25 +59,27 @@
   <h1>Look at your beautiful (or not) face</h1>
   <input id="name" placeholder="Enter your name">
   <button onclick="showFace()">See</button>
-<div id="like-section">
-  <button onclick="addLike()">👍 Like</button>
-  <span id="like-count">0</span> likes
-</div>
 
-<script>
-  // Récupère le compteur stocké ou met à 0
-  let likes = parseInt(localStorage.getItem('likes')) || 0;
-  document.getElementById('like-count').textContent = likes;
+  <!-- Zone pour afficher le résultat -->
+  <div id="result"></div>
 
-  function addLike() {
-    likes++;
-    localStorage.setItem('likes', likes); // Sauvegarde
-    document.getElementById('like-count').textContent = likes;
-  }
-</script>
-</div>
+  <!-- Zone du compteur de likes -->
+  <div id="like-section">
+    <button onclick="addLike()">👍 Like</button>
+    <span id="like-count">0</span> likes
+  </div>
 
   <script>
+    // Récupère le compteur stocké ou met à 0
+    let likes = parseInt(localStorage.getItem('likes')) || 0;
+    document.getElementById('like-count').textContent = likes;
+
+    function addLike() {
+      likes++;
+      localStorage.setItem('likes', likes); // Sauvegarde
+      document.getElementById('like-count').textContent = likes;
+    }
+
     function showFace() {
       const name = document.getElementById('name').value.trim();
       if (!name) return;
